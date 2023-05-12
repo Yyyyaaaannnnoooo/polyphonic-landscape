@@ -1,5 +1,10 @@
+// Shift+enter the following line to see the connected USB Devices
 SerialPort.devices;
-ServerOptions.outDevices;
+
+ServerOptions.outDevices; // <= this shows connected audio interfaces!
+
+// SELECT FROM HERE
+
 (
 ///~~~ SERVER CLEANUP ~~~///
 s.freeAll;
@@ -30,8 +35,7 @@ s.newBusAllocators;
 // function for your midi notes
 // like playing a synth
 }).permanent_(true);*/ /// <= this makes it cmd + . agnostic
-/*ServerOptions.outDevices;
-Server.default.options.outDevice_("AudioBox USB 96");
+/*Server.default.options.outDevice_("AudioBox USB 96");
 Server.default.options.inDevice_("AudioBox USB 96");*/
 
 // Server.default.options.outDevice_("BlackHole 16ch");
@@ -56,7 +60,7 @@ s.waitForBoot({
 	});
 
 	// replace this with folder name
-	~gltch = b[\gltch];
+	~audio = b[\audiofiles];
 
 	///~~~ LOAD SYNTH DEFS ~~~///
 	///~~~~~~~~~~~~~~~~~~~~~~~///
@@ -169,7 +173,7 @@ s.waitForBoot({
 	//<< Arduino Stuff >>//
 
 
-
+	// here you can change the port name!
 	~port = SerialPort.new("/dev/ttyACM0", baudrate: 9600);
 
 	~val = 0;
@@ -193,7 +197,7 @@ s.waitForBoot({
 	~sampler = Synth.new(\simpler,
 		[
 			\group, ~synths,
-			\buf, ~gltch[2],
+			\buf, ~audio[2],
 			\rate, 1,
 			\amp, -5.dbamp,
 			\out, 0,
@@ -216,6 +220,8 @@ s.waitForBoot({
 });
 
 )
+
+// UNTIL HERE
 
 //
 //
@@ -252,7 +258,7 @@ s.waitForBoot({
 // ~sampler = Synth.new(\simpler,
 // 	[
 // 		\group, ~synths,
-// 		\buf, ~gltch[2],
+// 		\buf, ~audio[2],
 // 		\rate, 1,
 // 		\amp, -25.dbamp,
 // 		\out, 0,
@@ -260,7 +266,7 @@ s.waitForBoot({
 // 	]
 // );
 // )
-/*~sampler.set(\buf, ~gltch[0]);
+/*~sampler.set(\buf, ~audio[0]);
 // ~val;
 
 (
