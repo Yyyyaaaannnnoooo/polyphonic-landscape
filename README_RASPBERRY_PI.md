@@ -87,7 +87,9 @@ sudo ldconfig
 ### Step 4: Set up JACK
 
 ```bash
-# `-dhw:0` is the internal soundcard. Use `-dhw:1` for USB soundcards. `aplay -l` will list available devices.
+# `-dhw:0` is the internal soundcard.
+# Use `-dhw:1` for USB soundcards. 
+# `aplay -l` will list available devices.
 # Use `nano ~/.jackdrc` to edit jack settings.
 
 # For GUI builds:
@@ -115,7 +117,8 @@ The code above might work but not properly, as there is still the need to solve 
 For now it is possible to manually change the port directly in SuperCollider.
 
 ```bash
-# assuming you followed all the steps as described and you have the polyphonic-landscape in your home directory
+# assuming you followed all the steps as described and
+# you have the polyphonic-landscape in your home directory
 cd polyphonic-landscape/sc
 # open the Supercollider editor
 scide sample-player/polyphonic-landscapes.scd
@@ -124,7 +127,8 @@ scide sample-player/polyphonic-landscapes.scd
 ```supercollider
 // in line 2 shift+enter to list usb devices in the console
 SerialPort.devices;
-// usually there are 2 to 3 one will be the arduino, the other probably keyboard and eventually audio interface
+// usually there are 2 to 3 one will be the arduino
+// the other probably keyboard and eventually audio interface
 
 // in line 177 you can change the usb port name
 ~port = SerialPort.new("/dev/ttyACM0", baudrate: 9600);
@@ -135,6 +139,10 @@ Once this changes are made, and assuming there are no errors added to the code s
 ### Step 7: Changing / Adding Audio Files
 
 The audio files are stored inside `polyphonic-landscape/sc/sample-player/audio/audiofiles`. All the files in the folder are automatically loaded in SuperCollider. Add and replace as many audio files you want, but never **MOVE** or **RENAME** the folder ⚠️
+
+# %%~%%~%%~%%~%%~%%~%%~%%~%%~%%~%%
+
+> below here comes from the original documentation, use it as reference but is not intended for this doc
 
 Usage
 -----
