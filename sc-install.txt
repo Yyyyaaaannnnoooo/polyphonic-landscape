@@ -1,0 +1,30 @@
+
+# Get updated
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get dist-upgrade
+
+# update the system, install required libraries
+sudo apt-get install git libjack-jackd2-dev qjackctl libsndfile1-dev libasound2-dev libavahi-client-dev libreadline6-dev libfftw3-dev libxt-dev libudev-dev libcwiid-dev cmake qttools5-dev-tools libqt5webkit5-dev qtpositioning5-dev libqt5sensors5-dev qttools5-dev libqt5svg5-dev
+
+cd ~ # or cd into the directory where you'd like to clone and build supercollider
+
+
+git clone --recurse-submodules https://github.com/supercollider/supercollider.git
+cd supercollider
+git checkout 3.9
+git submodule init && git submodule update
+mkdir build && cd build
+
+
+
+# For a GUI build:
+cmake -DCMAKE_BUILD_TYPE=Release -DSUPERNOVA=OFF -DSC_ED=OFF -DSC_EL=OFF -DSC_VIM=ON -DNATIVE=ON -DSC_USE_QTWEBENGINE:BOOL=OFF ..
+cmake --build . --config Release --target all -- -j3
+sudo cmake --build . --config Release --target install
+sudo ldconfig
+
+
+
+
+
