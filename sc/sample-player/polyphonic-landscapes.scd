@@ -1,3 +1,5 @@
+SerialPort.devices;
+ServerOptions.outDevices;
 (
 ///~~~ SERVER CLEANUP ~~~///
 s.freeAll;
@@ -149,84 +151,131 @@ s.waitForBoot({
 	};
 	ServerTree.add(~makeNodes);
 	ServerTree.run;
+	//<<RANDOM WAVE>>//
+	/*(
+	~rand_wave = {
+	arg min=100, max=19500, time=50;
+	var num_seg = rrand(6, 35);
+	Env(
+	[min]++
+	(({rrand(min, max)}!(num_seg-1))).scramble
+	++[min],
+	{exprand(1, time)}!num_seg,
+	\sine
+	// {rrand(-20, 20)}!num_seg
+	).asPseg
+	};
+	)*/
+	//<< Arduino Stuff >>//
 
-	(
-		~rand_wave = {
-			arg min=100, max=19500, time=50;
-			var num_seg = rrand(6, 35);
-			Env(
-				[min]++
-				(({rrand(min, max)}!(num_seg-1))).scramble
-				++[min],
-				{exprand(1, time)}!num_seg,
-				\sine
-				// {rrand(-20, 20)}!num_seg
-			).asPseg
-		}
-	)
+
+
+	~port = SerialPort.new("/dev/ttyACM0", baudrate: 9600);
+
+	~val = 0;
+	~char_array = [];
+	~get_value = Routine.new({
+		var ascii;
+		{
+			ascii = ~port.read.asAscii;
+			ascii.poll;
+			if(ascii.isDecDigit, {~char_array = ~char_array.add(ascii)});
+			if(ascii == $a, {
+				~val = ~char_array.collect(_.digit).convertDigits;
+				~char_array = [];
+			});
+		}.loop
+	}).play;
+
+
+
+
+	~sampler = Synth.new(\simpler,
+		[
+			\group, ~synths,
+			\buf, ~gltch[2],
+			\rate, 1,
+			\amp, -5.dbamp,
+			\out, 0,
+
+		]
+	);
+
+
+
+	~control = Routine.new({
+		{
+			~sampler.set(\pitch, ~val.linexp(0, 1023, 0.01, 4));
+			~val.poll;
+
+			0.01.wait;
+		}.loop;
+	}).play
+
 
 });
 
 )
 
-
-
-SerialPort.closeAll;
-SerialPort.devices;
-(
-~port = SerialPort.new("/dev/tty.usbmodem12101", baudrate: 9600);
-)
-
-~port.close;
-
-
-(
-~char_array = [];
-~get_value = Routine.new({
-	var ascii;
-	{
-		ascii = ~port.read.asAscii;
-		if(ascii.isDecDigit, {~char_array = ~char_array.add(ascii)});
-		if(ascii == $a, {
-			~val = ~char_array.collect(_.digit).convertDigits;
-			~char_array = [];
-		});
-	}.loop
-}).play;
-)
-
-~val;
-
-~sampler.free;
-s.freeAll;
-(
-
-~sampler = Synth.new(\simpler,
-	[
-		\group, ~synths,
-		\buf, ~gltch[2],
-		\rate, 1,
-		\amp, -25.dbamp,
-		\out, 0,
-
-	]
-);
-)
-~sampler.set(\amp, -40.dbamp);
+//
+//
+// //SerialPort.closeAll;
+// //SerialPort.devices;
+// (
+// ~port = SerialPort.new("/dev/tty.usbmodem12101", baudrate: 9600);
+// )
+//
+// //~port.close;
+//
+//
+// (
+// ~char_array = [];
+// ~get_value = Routine.new({
+// 	var ascii;
+// 	{
+// 		ascii = ~port.read.asAscii;
+// 		if(ascii.isDecDigit, {~char_array = ~char_array.add(ascii)});
+// 		if(ascii == $a, {
+// 			~val = ~char_array.collect(_.digit).convertDigits;
+// 			~char_array = [];
+// 		});
+// 	}.loop
+// }).play;
+// )
+//
+// ~val;
+//
+// ~sampler.free;
+// s.freeAll;
+// (
+//
+// ~sampler = Synth.new(\simpler,
+// 	[
+// 		\group, ~synths,
+// 		\buf, ~gltch[2],
+// 		\rate, 1,
+// 		\amp, -25.dbamp,
+// 		\out, 0,
+//
+// 	]
+// );
+// )
+/*~sampler.set(\buf, ~gltch[0]);
+// ~val;
 
 (
 ~control = Routine.new({
-	{
-		~sampler.set(\lpf, ~val.linexp(0, 1023, 50, 2000));
+ 	{
+~sampler.set(\lpf, ~val.linexp(0, 1023, 50, 20000));
 
-		0.01.wait;
-	}.loop;
+0.01.wait;
+}.loop;
 }).play
 )
 
-~control.stop;
-
-
+~control.stop;*/
+//
+//
 
 
 
