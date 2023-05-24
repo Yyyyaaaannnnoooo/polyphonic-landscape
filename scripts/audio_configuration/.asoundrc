@@ -1,0 +1,80 @@
+pcm.multi {
+    type multi;
+    slaves.a.pcm "hw:1,0";
+    slaves.a.channels 2;
+    slaves.b.pcm "hw:2,0";
+    slaves.b.channels 2;
+    slaves.c.pcm "hw:3,0";
+    slaves.c.channels 2;
+    bindings.0.slave a;
+    bindings.0.channel 0;
+    bindings.1.slave a;
+    bindings.1.channel 1;
+    bindings.2.slave b;
+    bindings.2.channel 0;
+    bindings.3.slave b;
+    bindings.3.channel 1;
+    bindings.4.slave c;
+    bindings.4.channel 0;
+    bindings.5.slave c;
+    bindings.5.channel 1;
+}
+
+ctl.multi {
+    type hw;
+    card 0;
+}
+
+
+#pcm.multi {
+ #   type multi;
+  #  slaves.a.pcm "hw:1,0";
+   # slaves.a.channels 6;
+    #bindings.0.slave a;
+   # bindings.0.channel 0;
+ #   bindings.1.slave a;
+  #  bindings.1.channel 1;
+  #  bindings.2.slave a;
+  #  bindings.2.channel 2;
+  #  bindings.3.slave a;
+  #  bindings.3.channel 3;
+  #  bindings.4.slave a;
+  #  bindings.4.channel 4;
+  #  bindings.5.slave a;
+  #  bindings.5.channel 5;
+#}
+
+
+#ctl.multi {
+ #   type hw;
+  #  card 1;
+#}
+
+
+
+pcm.ttable {
+    type route;
+    slave.pcm "multi";
+    ttable.0.0 1;
+    ttable.1.1 1;
+    ttable.2.2 1;
+    ttable.3.3 1;
+    ttable.4.4 1;
+    ttable.5.5 1;
+}
+ctl.ttable {
+    type hw;
+    card 0;
+}
+
+
+
+pcm.!default {
+        type hw
+        card 0
+}
+
+ctl.!default {
+        type hw
+        card 0
+}
